@@ -126,7 +126,7 @@ class _WakeUpGameState extends State<WakeUpGame> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColor,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 10),

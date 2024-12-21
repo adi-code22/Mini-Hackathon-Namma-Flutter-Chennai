@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mini_hack_flutter/screens/wake_up_game.dart';
 
 class AlarmClockScreen extends StatefulWidget {
   final String title;
-  
+
   const AlarmClockScreen({
     super.key,
     required this.title,
@@ -55,8 +56,8 @@ class _AlarmClockScreenState extends State<AlarmClockScreen> {
   void _checkAlarm() {
     if (_isAlarmSet) {
       for (var alarm in _alarms) {
-        if (alarm.hour == _currentTime.hour && 
-            alarm.minute == _currentTime.minute && 
+        if (alarm.hour == _currentTime.hour &&
+            alarm.minute == _currentTime.minute &&
             _currentTime.second == 0) {
           _playAlarm();
           _showAlarmDialog();
@@ -90,15 +91,15 @@ class _AlarmClockScreenState extends State<AlarmClockScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(16.0), 
-          title: const Text('Wake Up!'),
+          contentPadding: EdgeInsets.all(16.0),
+          title: const Text('காலை வணக்கம்! (Good Morning!)'),
           content: WakeUpGame(
-          onGameComplete: () {
-            _stopAlarm();
-            _alarms.removeAt(0);
-            Navigator.of(context).pop();
-          },
-        ),
+            onGameComplete: () {
+              _stopAlarm();
+              _alarms.removeAt(0);
+              Navigator.of(context).pop();
+            },
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text('Snooze'),
@@ -118,16 +119,10 @@ class _AlarmClockScreenState extends State<AlarmClockScreen> {
                     int bMinutes = b.hour * 60 + b.minute;
                     return aMinutes.compareTo(bMinutes);
                   });
+                  _alarms.removeAt(0);
                 });
               },
             ),
-            // TextButton(
-            //   child: const Text('Stop'),
-            //   onPressed: () {
-            //     _stopAlarm();
-            //     Navigator.of(context).pop();
-            //   },
-            // ),
           ],
         );
       },
@@ -170,73 +165,105 @@ class _AlarmClockScreenState extends State<AlarmClockScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.blue.shade900,
-              Colors.blue.shade700,
-            ],
-          ),
+          image: DecorationImage(
+                image: AssetImage("assets/bgimg.jpg"), fit: BoxFit.cover)
+        
+          // gradient: LinearGradient(
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          //   colors: [
+          //     Colors.deepOrange.shade900,
+          //     Colors.orange.shade600,
+          //   ],
+          // ),
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                _formatTime(_currentTime),
-                style: const TextStyle(
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                '${_currentTime.day}/${_currentTime.month}/${_currentTime.year}',
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white70,
-                ),
-              ),
-              const SizedBox(height: 40),
-              if (_alarms.isNotEmpty) ...[
-                const Text(
-                  'Active Alarms:',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white70,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ..._alarms.map((alarm) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    '${alarm.hour.toString().padLeft(2, '0')}:${alarm.minute.toString().padLeft(2, '0')}',
-                    style: const TextStyle(
-                      fontSize: 20,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0), // Adjust blur strength here
+          child: Container(
+            color: Colors.black.withOpacity(0.25),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Image(image: AssetImage('assets/nammaflutter.png')),
+                  Text(
+                    _formatTime(_currentTime),
+                    style: TextStyle(
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold,
                       color: Colors.white,
+                      fontFamily: 'Mukta Malar', // Use the Tamil font
                     ),
                   ),
-                )).toList(),
-              ],
-              const SizedBox(height: 40),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 15,
+                  const SizedBox(height: 20),
+                  Text(
+                    '${_currentTime.day}/${_currentTime.month}/${_currentTime.year}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white70,
+                      fontFamily: 'Mukta Malar', // Use the Tamil font
+                    ),
                   ),
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.blue.shade900,
-                ),
-                onPressed: () => _selectTime(context),
-                child: const Text(
-                  'Set Alarm',
-                  style: TextStyle(fontSize: 20),
-                ),
+                  const SizedBox(height: 40),
+                  if (_alarms.isNotEmpty) ...[
+                    Column(
+                      children: [const Text(
+                      'செயலில் உள்ள அலாரம்கள்:',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white70,
+                        fontFamily: 'Mukta Malar', // Use the Tamil font
+                      ),
+                    ),
+                    const Text(
+                      '(Active Alarms)',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black54,
+                        fontFamily: 'Mukta Malar', // Use the Tamil font
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ..._alarms.map((alarm) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        '${alarm.hour.toString().padLeft(2, '0')}:${alarm.minute.toString().padLeft(2, '0')}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontFamily: 'Mukta Malar', // Use the Tamil font
+                        ),
+                      ),
+                    )).toList(),],
+                    )
+                    
+                  ],
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 15,
+                      ),
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.deepOrange.shade900,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () => _selectTime(context),
+                    child: const Text(
+                      'அலாரம் அமைக்கவும்\n            (Set Alarm)',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Mukta Malar', // Use the Tamil font
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

@@ -12,12 +12,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Alarm Clock',
+      title: 'நம்ம Flutter Alarm Clock',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.dark,
       ),
-      home: const AlarmClockScreen(title: 'Flutter Alarm Clock'),
+      home: const AlarmClockScreen(title: 'நம்ம Flutter Alarm Clock'),
     );
   }
 }
