@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 import 'package:mini_hack_flutter/screens/wake_up_game.dart';
 
 class AlarmClockScreen extends StatefulWidget {
@@ -70,6 +71,7 @@ class _AlarmClockScreenState extends State<AlarmClockScreen> {
     if (!_isPlaying) {
       await _audioPlayer.resume();
       setState(() {
+        HapticFeedback.heavyImpact();
         _isPlaying = true;
       });
     }
@@ -84,6 +86,7 @@ class _AlarmClockScreenState extends State<AlarmClockScreen> {
       });
     }
   }
+
 
   Future<void> _showAlarmDialog() async {
     return showDialog(
