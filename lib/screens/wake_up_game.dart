@@ -115,7 +115,7 @@ class _WakeUpGameState extends State<WakeUpGame> {
     final double width = size.width;
     final double height = size.height;
     return Container(
-      height: height * 0.75,
+      height: height * 0.65,
       width: width * 0.75,
       padding: const EdgeInsets.all(16),
       child: Column(
